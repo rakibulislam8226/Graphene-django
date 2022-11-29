@@ -1,9 +1,12 @@
 import graphene
 from graphene import relay, ObjectType
 from . import models
+from . import mutations
 from .types import CategoryType, IngredientType, CheckNewModelsType
 from graphene_django import DjangoObjectType
 from django.db.models import Q
+from graphene_django import DjangoListField
+from graphene_django.filter import DjangoFilterConnectionField
 
 
 # from .schema import resolve_all_ingredients, resolve_category_by_name
@@ -16,11 +19,12 @@ from django.db.models import Q
 
 
 class Query(graphene.ObjectType):
-    all_ingredients = graphene.List(IngredientType)
+    all_ingredients = graphene.List(IngredientType)  # DjangoListField = graphene.List
     category_by_id = graphene.Field(CategoryType, category_id=graphene.Int(required=True))
     category_by_name = graphene.Field(CategoryType, name=graphene.String(required=True))
     check_new_models = graphene.List(CheckNewModelsType, start_after=graphene.Int(), first=graphene.Int(),
                                      skip=graphene.Int(), search=graphene.String())
+    # check_new_models_filter = DjangoFilterConnectionField(CheckNewModelsType, )
 
     def resolve_all_ingredients(root, info):
         return models.Ingredient.objects.select_related("category").all()
@@ -59,5 +63,14 @@ class Query(graphene.ObjectType):
         else:
             return models.CheckNewModels.objects.none()
 
+    # def resolve_check_new_models_filter(root, info):
+    #     return models.CheckNewModels.objects.all()
 
-schema = graphene.Schema(query=Query)
+
+class GraphQLMutations(graphene.ObjectType):
+    create_check_new_models = mutations.CreateCheckNewModelsMutation.Field()
+    update_check_new_models = mutations.UpdateCheckNewModelsMutation.Field()
+    delete_check_new_models = mutations.DeleteCheckNewModelsMutation.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=GraphQLMutations)

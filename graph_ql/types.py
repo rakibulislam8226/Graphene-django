@@ -1,6 +1,6 @@
 import graphene
 from graphene_django import DjangoObjectType
-
+from graphene import relay, ObjectType
 from .models import Category, Ingredient, CheckNewModels
 
 
@@ -25,5 +25,8 @@ class CheckNewModelsType(DjangoObjectType):
     class Meta:
         model = CheckNewModels
         fields = ("id", "name", "title", "kind", "category")
-        # convert_choices_to_enum = False
+        # filter_fields = ('name', 'title', 'kind', 'category')
+        convert_choices_to_enum = False
+        # convert_choices_to_enum = ["kind"]
+        # interfaces = (relay.Node,)
 

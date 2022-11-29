@@ -21,12 +21,17 @@ class Ingredient(models.Model):
 
 
 class CheckNewModels(models.Model):
+    KIND = (
+        ("Feedback", "Feedback"),
+        ("Cancellation", "Cancellation"),
+        ("Regret", "Regret"),
+    )
     name = models.CharField(max_length=100)
-    title = models.TextField()
+    title = models.TextField(blank=True)
     category = models.ForeignKey(
         Category, related_name="cat", on_delete=models.CASCADE
     )
-    kind = models.CharField(max_length=100, choices=(("cat", "Cat"), ("dog", "Dog")))
+    kind = models.CharField(max_length=100, choices=KIND, default=1)
 
     def __str__(self):
         return self.name

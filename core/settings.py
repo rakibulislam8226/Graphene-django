@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     "graphene_django",
     # for explore
     'graphene_graphiql_explorer',
+    "django_filters",
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

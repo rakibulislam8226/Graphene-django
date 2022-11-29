@@ -7,6 +7,9 @@ name = "pypi"
 django = "*"
 graphene-django = "*"
 graphene-graphiql-explorer = "*"
+djangorestframework = "*"
+django-filter = "*"
+django-model-mutations = "*"
 
 [dev-packages]
 
