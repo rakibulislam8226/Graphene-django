@@ -7,8 +7,6 @@ from graphene_django import DjangoObjectType
 from django.db.models import Q
 from graphene_django import DjangoListField
 from graphene_django.filter import DjangoFilterConnectionField
-
-
 # from .schema import resolve_all_ingredients, resolve_category_by_name
 
 
@@ -24,7 +22,6 @@ class Query(graphene.ObjectType):
     category_by_name = graphene.Field(CategoryType, name=graphene.String(required=True))
     check_new_models = graphene.List(CheckNewModelsType, start_after=graphene.Int(), first=graphene.Int(),
                                      skip=graphene.Int(), search=graphene.String())
-    # check_new_models_filter = DjangoFilterConnectionField(CheckNewModelsType, )
 
     def resolve_all_ingredients(root, info):
         return models.Ingredient.objects.select_related("category").all()
@@ -53,6 +50,10 @@ class Query(graphene.ObjectType):
                         Q(title__icontains=search)
                 )
                 qs = qs.filter(filter)
+            # x = [2, 7, 5, 9, 2, 4]
+            # print(x[2 - 1:])  # start
+            # print(x[:2])  # first
+            # print(x[-3:])  # last
             if start_after:
                 qs = qs[start_after::]
             if skip:
@@ -71,6 +72,10 @@ class GraphQLMutations(graphene.ObjectType):
     create_check_new_models = mutations.CreateCheckNewModelsMutation.Field()
     update_check_new_models = mutations.UpdateCheckNewModelsMutation.Field()
     delete_check_new_models = mutations.DeleteCheckNewModelsMutation.Field()
+
+    create_ingredients = mutations.CreateIngredients.Field()
+    update_ingredients = mutations.UpdateIngredients.Field()
+    delete_ingredients = mutations.DeleteIngredients.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=GraphQLMutations)
