@@ -2,11 +2,15 @@ import graphene
 from graphene import relay, ObjectType
 from . import models
 from . import mutations
-from .types import CategoryType, IngredientType, CheckNewModelsType
+from .types import CategoryType, IngredientType, CheckNewModelsType, UserType
 from graphene_django import DjangoObjectType
 from django.db.models import Q
 from graphene_django import DjangoListField
 from graphene_django.filter import DjangoFilterConnectionField
+import graphql_jwt
+from graphql_jwt.decorators import login_required
+
+
 # from .schema import resolve_all_ingredients, resolve_category_by_name
 
 
@@ -23,9 +27,13 @@ class Query(graphene.ObjectType):
     check_new_models = graphene.List(CheckNewModelsType, start_after=graphene.Int(), first=graphene.Int(),
                                      skip=graphene.Int(), search=graphene.String())
 
+    # authentication with jwt
+    viewer = graphene.Field(UserType, token=graphene.String(required=True))
+
     def resolve_all_ingredients(root, info):
         return models.Ingredient.objects.select_related("category").all()
 
+    @login_required
     def resolve_category_by_id(root, info, category_id):
         try:
             return models.Category.objects.get(pk=category_id)
@@ -67,6 +75,15 @@ class Query(graphene.ObjectType):
     # def resolve_check_new_models_filter(root, info):
     #     return models.CheckNewModels.objects.all()
 
+    # def resolve_viewer(self, info, **kwargs):
+    #     user = info.context.user
+    #     if not user.is_authenticated:
+    #         raise Exception("Authentication credentials were not provided")
+    #     return user
+    @login_required
+    def resolve_viewer(self, info, **kwargs):
+        return info.context.user
+
 
 class GraphQLMutations(graphene.ObjectType):
     create_check_new_models = mutations.CreateCheckNewModelsMutation.Field()
@@ -76,6 +93,11 @@ class GraphQLMutations(graphene.ObjectType):
     create_ingredients = mutations.CreateIngredients.Field()
     update_ingredients = mutations.UpdateIngredients.Field()
     delete_ingredients = mutations.DeleteIngredients.Field()
+
+    # authentication with jwt
+    token_auth = graphql_jwt.ObtainJSONWebToken.Field()
+    verify_token = graphql_jwt.Verify.Field()
+    refresh_token = graphql_jwt.Refresh.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=GraphQLMutations)

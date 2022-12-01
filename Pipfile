@@ -10,6 +10,7 @@ graphene-graphiql-explorer = "*"
 djangorestframework = "*"
 django-filter = "*"
 django-model-mutations = "*"
+django-graphql-jwt = "*"
 
 [dev-packages]
 

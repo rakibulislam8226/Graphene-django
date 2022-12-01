@@ -2,6 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from graphene import relay, ObjectType
 from .models import Category, Ingredient, CheckNewModels
+from django.contrib.auth.models import User
 
 
 class CategoryType(DjangoObjectType):
@@ -30,3 +31,8 @@ class CheckNewModelsType(DjangoObjectType):
         # convert_choices_to_enum = ["kind"]
         # interfaces = (relay.Node,)
 
+
+class UserType(DjangoObjectType):
+    class Meta:
+        model = User
+        fields = "__all__"
