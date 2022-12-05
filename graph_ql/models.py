@@ -61,6 +61,12 @@ class TestAllFields(models.Model):
     is_active = models.BooleanField(default=True)
     internal_note = models.TextField()
     title = models.CharField(max_length=50)
+    PUBLISH_STATUS =(
+        (1, 'Draft'),
+        (2, "Pending"),
+        (3, "Success"),
+    )
+    publish_status = models.IntegerField(choices=PUBLISH_STATUS, default=2)
 
     class Meta:
         verbose_name = "TestAllField"

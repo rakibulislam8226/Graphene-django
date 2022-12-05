@@ -63,7 +63,7 @@ class Query(graphene.ObjectType):
             # print(x[:2])  # first
             # print(x[-3:])  # last
             if start_after:
-                qs = qs[start_after::]
+                qs = qs[start_after-1::]
             if skip:
                 qs = qs[skip:]
             if first:

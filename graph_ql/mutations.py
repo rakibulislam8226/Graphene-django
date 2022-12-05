@@ -120,6 +120,7 @@ class UpdateTestAllFields(graphene.Mutation):
         max_number_events = graphene.String()
         internal_note = graphene.String()
         is_active = graphene.ID()
+        publish_status = graphene.ID()
 
     testallfield = graphene.Field(types.TestAllFieldsType)
 
@@ -133,38 +134,6 @@ class UpdateTestAllFields(graphene.Mutation):
         else:
             print('User with given ID does not exist.')
 
-# class UpdateTestAllFields(SerializerMutation):
-#     class Meta:
-#         serializer_class = serializer.TestAllFieldsSerializer
-#         convert_choices_to_enum = False
-#         model_operations = ['update']
-#         lookup_field = 'id'
-#
-#     @classmethod
-#     def mutate(cls, root, info, **kwargs):
-#         kwargs['input']['integradient'] = kwargs['input']['integradient'].split(',')
-#         return super().mutate(root, info, **kwargs)
-#
-#     @classmethod
-#     def get_serializer_kwargs(cls, root, info, **input):
-#         if 'id' in input:
-#             instance = models.TestAllFields.objects.filter(
-#                 id=input['id']).first()
-#             if instance:
-#                 if input.get('category') == '':
-#                     input.pop('category')
-#                 if input.get('integradient') == '':
-#                     input.pop('integradient')
-#                 if input.get('internalNote') == '':
-#                     input.pop('internalNote')
-#                 if input.get('statusSelection') == '':
-#                     input.pop('statusSelection')
-#                 if input.get('title') == '':
-#                     input.pop('title')
-#                 return {'instance': instance, 'data': input, 'partial': True}
-#             else:
-#                 raise ValueError("Data not found")
-#         return {'data': input, 'partial': True}
 
 class DeleteTestAllField(graphene.Mutation):
     class Arguments:
@@ -176,3 +145,5 @@ class DeleteTestAllField(graphene.Mutation):
     def mutate(cls, root, info, id):
         testallfield = models.TestAllFields.objects.get(id=id)
         testallfield.delete()
+
+# TestAllFields end #
