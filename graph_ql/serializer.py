@@ -13,3 +13,9 @@ class IngredientSerializer(serializers.ModelSerializer):
         model = models.Ingredient
         fields = '__all__'
 
+
+class TestAllFieldsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TestAllFields
+        fields = '__all__'
+

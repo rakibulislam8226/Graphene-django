@@ -94,6 +94,10 @@ class GraphQLMutations(graphene.ObjectType):
     update_ingredients = mutations.UpdateIngredients.Field()
     delete_ingredients = mutations.DeleteIngredients.Field()
 
+    create_test_all_fields = mutations.CreateTestAllFields.Field()
+    update_test_all_fields = mutations.UpdateTestAllFields.Field()
+    delete_test_all_fields = mutations.DeleteTestAllField.Field()
+
     # authentication with jwt
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()

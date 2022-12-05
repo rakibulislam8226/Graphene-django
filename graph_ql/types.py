@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 from graphene import relay, ObjectType
-from .models import Category, Ingredient, CheckNewModels
+from .models import Category, Ingredient, CheckNewModels, TestAllFields
 from django.contrib.auth.models import User
 
 
@@ -36,3 +36,9 @@ class UserType(DjangoObjectType):
     class Meta:
         model = User
         fields = "__all__"
+class TestAllFieldsType(DjangoObjectType):
+    class Meta:
+        model = TestAllFields
+        fields = "__all__"
+        convert_choices_to_enum = False
+

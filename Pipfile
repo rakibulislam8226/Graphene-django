@@ -11,6 +11,7 @@ djangorestframework = "*"
 django-filter = "*"
 django-model-mutations = "*"
 django-graphql-jwt = "*"
+django-multiselectfield = "*"
 
 [dev-packages]
 

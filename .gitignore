@@ -6,3 +6,4 @@ db.sqlite3
 env
 local_settings.py
 __pycache__/
+pyvenv.cfg
