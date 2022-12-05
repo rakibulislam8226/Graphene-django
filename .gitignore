@@ -4,6 +4,10 @@ db.sqlite3
 !**/migrations/__init__.py
 !.gitignore
 env
+venv
 local_settings.py
 __pycache__/
 pyvenv.cfg
+
+Lib
+Scripts
