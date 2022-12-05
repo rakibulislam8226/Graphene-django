@@ -110,61 +110,61 @@ class CreateTestAllFields(SerializerMutation):
         return super().mutate(root, info, **kwargs)
 
 
-# class UpdateTestAllFields(graphene.Mutation):
-#     class Arguments:
-#         id = graphene.ID(required=True)
-#         title = graphene.String()
-#         integradient = graphene.ID()
-#         category = graphene.ID()
-#         status_selection = graphene.String()
-#         max_number_events = graphene.String()
-#         internal_note = graphene.String()
-#         is_active = graphene.ID()
-#
-#     testallfield = graphene.Field(types.TestAllFieldsType)
+class UpdateTestAllFields(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+        title = graphene.String()
+        integradient = graphene.ID()
+        category = graphene.ID()
+        status_selection = graphene.String()
+        max_number_events = graphene.String()
+        internal_note = graphene.String()
+        is_active = graphene.ID()
+
+    testallfield = graphene.Field(types.TestAllFieldsType)
+
+    @classmethod
+    def mutate(cls, root, info, id, **update_data):
+        testallfield = models.TestAllFields.objects.filter(id=id)
+        if testallfield:
+            params = update_data
+            testallfield.update(**{k: v for k, v in params.items() if params[k]})
+            return UpdateIngredients()
+        else:
+            print('User with given ID does not exist.')
+
+# class UpdateTestAllFields(SerializerMutation):
+#     class Meta:
+#         serializer_class = serializer.TestAllFieldsSerializer
+#         convert_choices_to_enum = False
+#         model_operations = ['update']
+#         lookup_field = 'id'
 #
 #     @classmethod
-#     def mutate(cls, root, info, id, **update_data):
-#         testallfield = models.TestAllFields.objects.filter(id=id)
-#         if testallfield:
-#             params = update_data
-#             testallfield.update(**{k: v for k, v in params.items() if params[k]})
-#             return UpdateIngredients()
-#         else:
-#             print('User with given ID does not exist.')
-
-class UpdateTestAllFields(SerializerMutation):
-    class Meta:
-        serializer_class = serializer.TestAllFieldsSerializer
-        convert_choices_to_enum = False
-        model_operations = ['update']
-        lookup_field = 'id'
-
-    @classmethod
-    def mutate(cls, root, info, **kwargs):
-        kwargs['input']['integradient'] = kwargs['input']['integradient'].split(',')
-        return super().mutate(root, info, **kwargs)
-
-    @classmethod
-    def get_serializer_kwargs(cls, root, info, **input):
-        if 'id' in input:
-            instance = models.TestAllFields.objects.filter(
-                id=input['id']).first()
-            if instance:
-                if input.get('category') == '':
-                    input.pop('category')
-                if input.get('integradient') == '':
-                    input.pop('integradient')
-                if input.get('internalNote') == '':
-                    input.pop('internalNote')
-                if input.get('statusSelection') == '':
-                    input.pop('statusSelection')
-                if input.get('title') == '':
-                    input.pop('title')
-                return {'instance': instance, 'data': input, 'partial': True}
-            else:
-                raise ValueError("Data not found")
-        return {'data': input, 'partial': True}
+#     def mutate(cls, root, info, **kwargs):
+#         kwargs['input']['integradient'] = kwargs['input']['integradient'].split(',')
+#         return super().mutate(root, info, **kwargs)
+#
+#     @classmethod
+#     def get_serializer_kwargs(cls, root, info, **input):
+#         if 'id' in input:
+#             instance = models.TestAllFields.objects.filter(
+#                 id=input['id']).first()
+#             if instance:
+#                 if input.get('category') == '':
+#                     input.pop('category')
+#                 if input.get('integradient') == '':
+#                     input.pop('integradient')
+#                 if input.get('internalNote') == '':
+#                     input.pop('internalNote')
+#                 if input.get('statusSelection') == '':
+#                     input.pop('statusSelection')
+#                 if input.get('title') == '':
+#                     input.pop('title')
+#                 return {'instance': instance, 'data': input, 'partial': True}
+#             else:
+#                 raise ValueError("Data not found")
+#         return {'data': input, 'partial': True}
 
 class DeleteTestAllField(graphene.Mutation):
     class Arguments:
