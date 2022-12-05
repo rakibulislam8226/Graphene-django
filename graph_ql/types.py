@@ -3,6 +3,7 @@ from graphene_django import DjangoObjectType
 from graphene import relay, ObjectType
 from .models import Category, Ingredient, CheckNewModels, TestAllFields
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 
 class CategoryType(DjangoObjectType):
@@ -36,6 +37,34 @@ class UserType(DjangoObjectType):
     class Meta:
         model = User
         fields = "__all__"
+
+
+class AllUserType(DjangoObjectType):
+    class Meta:
+        model = User
+        fields = ('id',)
+
+    active = graphene.Int()
+
+    def resolve_active(self, info):
+        total = User.objects.all()
+        length = len(total)
+        return (length)
+
+
+class AllEmailUserType(DjangoObjectType):
+    class Meta:
+        model = User
+        fields = ('id',)
+
+    active = graphene.Int()
+
+    def resolve_active(self, info):
+        total = User.objects.all().values('email').annotate(total=Count('email'))
+        length = len(total)
+        return (length-1)
+
+
 class TestAllFieldsType(DjangoObjectType):
     class Meta:
         model = TestAllFields

@@ -2,13 +2,14 @@ import graphene
 from graphene import relay, ObjectType
 from . import models
 from . import mutations
-from .types import CategoryType, IngredientType, CheckNewModelsType, UserType
+from .types import CategoryType, IngredientType, CheckNewModelsType, UserType, AllUserType, AllEmailUserType
 from graphene_django import DjangoObjectType
 from django.db.models import Q
 from graphene_django import DjangoListField
 from graphene_django.filter import DjangoFilterConnectionField
 import graphql_jwt
 from graphql_jwt.decorators import login_required
+from django.contrib.auth.models import User
 
 
 # from .schema import resolve_all_ingredients, resolve_category_by_name
@@ -26,6 +27,8 @@ class Query(graphene.ObjectType):
     category_by_name = graphene.Field(CategoryType, name=graphene.String(required=True))
     check_new_models = graphene.List(CheckNewModelsType, start_after=graphene.Int(), first=graphene.Int(),
                                      skip=graphene.Int(), search=graphene.String())
+    all_user = graphene.List(AllUserType)
+    all_email_user = graphene.List(AllEmailUserType)
 
     # authentication with jwt
     viewer = graphene.Field(UserType, token=graphene.String(required=True))
@@ -83,6 +86,11 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_viewer(self, info, **kwargs):
         return info.context.user
+    @login_required
+    def resolve_all_user(self, info, **kwargs):
+        return User.objects.filter(pk=1)
+    def resolve_all_email_user(self, info, **kwargs):
+        return User.objects.filter(pk=1)
 
 
 class GraphQLMutations(graphene.ObjectType):
